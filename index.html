@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>1-Bit Glitch Protocol | V35_FINAL_CUT</title>
+    <title>1-Bit Glitch Protocol | V39_BALANCED_REALITY</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     <style>
         body { margin: 0; overflow: hidden; background: #050505; display: flex; justify-content: center; align-items: center; height: 100vh; font-family: 'VT323', monospace; color: #fff; }
@@ -51,11 +51,12 @@
         <div class="vignette"></div>
 
         <div id="boot">
-            <h1 style="text-shadow: 4px 0 #f00, -4px 0 #00f;">[ ARSENAL_V35 ]</h1>
+            <h1 style="text-shadow: 4px 0 #f00, -4px 0 #00f;">[ ARSENAL_V39 ]</h1>
             <p class="blink" style="margin-top: 20px; font-size: 24px;">>> PRESS_ANY_KEY_TO_INITIALIZE <<</p>
             <div style="font-size: 14px; opacity: 0.7; margin-top: 50px; text-align: center; color: #888;">
-                UPDATE: 4_STAGE_STRUCTURE_LOCKED<br>
-                UPDATE: ENEMY_SPAWN_RATE_UNLOCKED<br>
+                UPDATE: WEAPON_DAMAGE_NERF (BALANCED)<br>
+                UPDATE: BOSS_BACKGROUND_VISIBILITY_FIX<br>
+                UPDATE: PLASMA_NOVA_REWORK<br>
                 SYSTEM: READY
             </div>
             <div style="margin-top: 80px; font-size: 16px; color: #0f0; border-top: 1px solid #0f0; padding-top: 10px;">
@@ -109,7 +110,7 @@
 
         // --- AUDIO ENGINE ---
         const AC = new (window.AudioContext || window.webkitAudioContext)();
-        const masterGain = AC.createGain(); masterGain.connect(AC.destination); masterGain.gain.value = 0.3;
+        const masterGain = AC.createGain(); masterGain.connect(AC.destination); masterGain.gain.value = 0.4;
         const bufferSize = AC.sampleRate * 2; const noiseBuffer = AC.createBuffer(1, bufferSize, AC.sampleRate);
         const output = noiseBuffer.getChannelData(0); for (let i = 0; i < bufferSize; i++) output[i] = Math.random() * 2 - 1;
 
@@ -184,12 +185,12 @@
                 }, tempo);
             } 
             else if (trackType === 'BOSS') {
-                if (bossId === 0) { baseFreq = 120; waveType = 'square'; tempo = 180; } 
-                else if (bossId === 1) { baseFreq = 150; waveType = 'sawtooth'; tempo = 160; } 
-                else if (bossId === 2) { baseFreq = 100; waveType = 'triangle'; tempo = 150; } 
-                else if (bossId === 3) { baseFreq = 80; waveType = 'sawtooth'; tempo = 110; } // Final Boss Fast
+                if (bossId === 0) { baseFreq = 110; waveType = 'square'; tempo = 180; } 
+                else if (bossId === 1) { baseFreq = 140; waveType = 'sawtooth'; tempo = 160; } 
+                else if (bossId === 2) { baseFreq = 90; waveType = 'triangle'; tempo = 150; } 
+                else if (bossId === 3) { baseFreq = 70; waveType = 'sawtooth'; tempo = 110; } 
 
-                if (phase === 2) { tempo *= 0.7; baseFreq *= 1.2; }
+                if (phase === 2) { tempo *= 0.6; baseFreq *= 1.3; } 
 
                 musicInterval = setInterval(() => {
                     const t = AC.currentTime;
@@ -208,7 +209,7 @@
                     if (beat % 2 !== 0 || (phase === 2 && beat % 1 === 0)) { 
                         const noise = AC.createBufferSource(); noise.buffer = noiseBuffer;
                         const ng = AC.createGain(); noise.connect(ng); ng.connect(masterGain);
-                        ng.gain.setValueAtTime(0.05, t); ng.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+                        ng.gain.setValueAtTime(0.08, t); ng.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
                         noise.start(t); noise.stop(t + 0.05);
                     }
                     beat++;
@@ -218,26 +219,25 @@
 
         playMusic('AMBIENT');
 
-        // --- GAME DATA ---
+        // --- GAME DATA (WEAPONS NERFED FOR BALANCE) ---
         const WEAPON_TYPES = [
-            { id: 'standard', name: "CORE_BOLT", desc: "Standard energy.", ult: "TRIPLE STREAM", dmg: 10, color: "#fff", rate: 8 },
-            { id: 'spread', name: "FAN_LOGIC", desc: "Area denial.", ult: "5-WAY BURST", dmg: 7, color: "#0ff", rate: 7 },
-            { id: 'laser', name: "VOID_PIERCER", desc: "Penetration.", ult: "HYPER BEAM", dmg: 5, color: "#f0f", rate: 9 },
-            { id: 'wave', name: "SINE_ERROR", desc: "Erratic path.", ult: "DOUBLE HELIX", dmg: 18, color: "#ff0", rate: 5 },
-            { id: 'heavy', name: "NULL_POINTER", desc: "Heavy impact.", ult: "EXPLOSIVE", dmg: 60, color: "#f00", rate: 2 },
-            { id: 'glitch', name: "BIT_CRUSHER", desc: "Damage over time.", ult: "SCREEN CORRUPTION", dmg: 35, color: "#0f0", rate: 4 },
-            { id: 'rapid', name: "OVERCLOCK", desc: "Fast fire.", ult: "MINIGUN", dmg: 4, color: "#fff", rate: 10 },
-            { id: 'orbit', name: "SENTINEL", desc: "Defense.", ult: "DUAL SHIELD", dmg: 15, color: "#fff", rate: 0 },
-            { id: 'nova', name: "PLASMA_NOVA", desc: "Slow massive projectile.", ult: "SUPERNOVA", dmg: 80, color: "#FF4500", rate: 3 },
-            { id: 'rail', name: "RAIL_CANNON", desc: "Instant velocity.", ult: "DUAL RAIL", dmg: 45, color: "#00BFFF", rate: 6 }
+            { id: 'standard', name: "CORE_BOLT", desc: "Standard energy.", ult: "TRIPLE STREAM", dmg: 4, color: "#fff", rate: 8 },
+            { id: 'spread', name: "FAN_LOGIC", desc: "Area denial.", ult: "5-WAY BURST", dmg: 3, color: "#0ff", rate: 7 },
+            { id: 'laser', name: "VOID_PIERCER", desc: "Penetration.", ult: "HYPER BEAM", dmg: 2, color: "#f0f", rate: 9 },
+            { id: 'wave', name: "SINE_ERROR", desc: "Erratic path.", ult: "DOUBLE HELIX", dmg: 8, color: "#ff0", rate: 5 },
+            { id: 'heavy', name: "NULL_POINTER", desc: "Heavy impact.", ult: "EXPLOSIVE", dmg: 25, color: "#f00", rate: 2 },
+            { id: 'glitch', name: "BIT_CRUSHER", desc: "Damage over time.", ult: "SCREEN CORRUPTION", dmg: 10, color: "#0f0", rate: 4 },
+            { id: 'rapid', name: "OVERCLOCK", desc: "Fast fire.", ult: "MINIGUN", dmg: 1.5, color: "#fff", rate: 10 },
+            { id: 'orbit', name: "SENTINEL", desc: "Defense.", ult: "DUAL SHIELD", dmg: 5, color: "#fff", rate: 0 },
+            { id: 'nova', name: "PLASMA_NOVA", desc: "Slow massive projectile.", ult: "SUPERNOVA", dmg: 18, color: "#FF4500", rate: 3 }, // NERFED HARD
+            { id: 'rail', name: "RAIL_CANNON", desc: "Instant velocity.", ult: "DUAL RAIL", dmg: 12, color: "#00BFFF", rate: 6 } // NERFED
         ];
 
-        // 4 Bosses Only (Merged Final)
         const BOSS_DATA = [
-            { name: "ROOT_ACCESSOR", title: "GATEKEEPER", color: "#0ff", shape: "cube" },
+            { name: "ROOT_ACCESSOR", title: "GATEKEEPER", color: "#0f0", shape: "cube" },
             { name: "MEMORY_LEAK", title: "UNSTABLE", color: "#f0f", shape: "glitch" },
-            { name: "LOGIC_BOMB", title: "CALCULATED", color: "#f00", shape: "pyramid" },
-            { name: "KERNEL_PANIC", title: "THE END", color: "#fff", shape: "void" }
+            { name: "LOGIC_BOMB", title: "CALCULATED", color: "#FFD700", shape: "pyramid" },
+            { name: "KERNEL_PANIC", title: "THE END", color: "#f00", shape: "void" }
         ];
 
         const ENEMY_TYPES = [
@@ -248,7 +248,7 @@
             { type: 'swarmer', hp: 5, s: 8, color: '#FF4500', score: 15 } 
         ];
 
-        let score = 0, exp = 0, nextLevelExp = 800, frameCount = 0, health = 100, gameState = 'PLAY';
+        let score = 0, exp = 0, nextLevelExp = 1000, frameCount = 0, health = 100, gameState = 'PLAY';
         let level = 1; let upgradesInStage = 0; 
         let shake = 0, damageFlash = 0;
         let bullets = [], enemyBullets = [], enemies = [], particles = [], drops = [], logs = ["> SYSTEM_START"];
@@ -326,7 +326,7 @@
 
         function triggerVictory() {
             gameState = 'VICTORY'; boss = null; enemies = []; enemyBullets = []; bullets = [];
-            playMusic('AMBIENT');
+            if(musicInterval) clearInterval(musicInterval);
             victoryUI.style.display = 'flex'; document.getElementById('final-score').innerText = `FINAL SCORE: ${score} | EXP: ${exp}`; playSfx('win');
         }
 
@@ -337,7 +337,9 @@
                 this.size = 140;
                 this.x = (C.w - C.uiWidth)/2 - this.size/2; this.y = -200;
                 
-                this.hp = 18000 + (lvlIdx * 8000); 
+                let baseHp = 40000;
+                if (lvlIdx === 3) baseHp = 120000; // Final boss GOD MODE
+                this.hp = baseHp + (lvlIdx * 15000); 
                 
                 this.maxHp = this.hp; 
                 this.t = 0;
@@ -366,55 +368,56 @@
 
                 if (this.phase === 1) {
                     this.x += Math.sin(this.t) * 2;
-                    if (frameCount % 50 === 0) { // Slightly faster attack rate for base
+                    if (frameCount % 30 === 0) { 
                         playSfx('shoot', 0.4, 0.4);
-                        let count = 10; // More bullets
+                        let count = 12; 
                         for(let i=0; i<count; i++) {
                             let rad = (Math.PI*2/count)*i + this.t;
-                            enemyBullets.push({x:cx, y:cy, vx:Math.cos(rad)*5, vy:Math.sin(rad)*5, sz:10});
+                            enemyBullets.push({x:cx, y:cy, vx:Math.cos(rad)*6, vy:Math.sin(rad)*6, sz:10});
                         }
                     }
                 }
                 else {
-                    // PHASE 2 AGGRESSIVE PATTERNS
                     if (this.id === 0) { // CUBE
-                        if (frameCount % 8 === 0) { // RAPID SPIN
+                        if (frameCount % 5 === 0) { 
                             playSfx('shoot', 0.5, 0.3);
-                            let rad1 = this.t * 6; let rad2 = -this.t * 6;
-                            enemyBullets.push({x:cx, y:cy, vx:Math.cos(rad1)*7, vy:Math.sin(rad1)*7, sz:8});
-                            enemyBullets.push({x:cx, y:cy, vx:Math.cos(rad2)*7, vy:Math.sin(rad2)*7, sz:8});
+                            let rad1 = this.t * 7; let rad2 = -this.t * 7;
+                            enemyBullets.push({x:cx, y:cy, vx:Math.cos(rad1)*8, vy:Math.sin(rad1)*8, sz:8});
+                            enemyBullets.push({x:cx, y:cy, vx:Math.cos(rad2)*8, vy:Math.sin(rad2)*8, sz:8});
                         }
                     }
                     else if (this.id === 1) { // GLITCH
-                        if (this.phaseTimer % 120 === 0) { // Faster Teleport (2s)
+                        if (this.phaseTimer % 80 === 0) { 
                             this.x = Math.random() * (C.w - C.uiWidth - 200) + 50;
                             this.y = Math.random() * 200 + 50;
                             createParticles(this.x+70, this.y+70, 20, "#fff");
-                            for(let i=0; i<12; i++) enemyBullets.push({x:this.x+70, y:this.y+70, vx:(Math.random()-0.5)*18, vy:(Math.random()-0.5)*18, sz:8});
+                            for(let i=0; i<16; i++) enemyBullets.push({x:this.x+70, y:this.y+70, vx:(Math.random()-0.5)*20, vy:(Math.random()-0.5)*20, sz:8});
                         }
-                        this.x += (Math.random()-0.5) * 4; 
+                        this.x += (Math.random()-0.5) * 5; 
                     }
                     else if (this.id === 2) { // PYRAMID
                         this.size = 220; this.x = (C.w - C.uiWidth)/2 - this.size/2; 
-                        if (frameCount % 60 === 0) { // Faster Lasers
-                            enemyBullets.push({x:0, y:cy, vx:15, vy:0, sz:40, laser:true}); 
-                            enemyBullets.push({x:C.w, y:cy, vx:-15, vy:0, sz:40, laser:true}); 
-                            enemyBullets.push({x:cx, y:0, vx:0, vy:15, sz:40, laser:true}); 
-                            // Diagonal
-                            enemyBullets.push({x:0, y:0, vx:10, vy:10, sz:20, laser:true});
-                            enemyBullets.push({x:C.w, y:0, vx:-10, vy:10, sz:20, laser:true});
+                        if (frameCount % 30 === 0) { 
+                            enemyBullets.push({x:0, y:cy, vx:20, vy:0, sz:40, laser:true}); 
+                            enemyBullets.push({x:C.w, y:cy, vx:-20, vy:0, sz:40, laser:true}); 
+                            enemyBullets.push({x:cx, y:0, vx:0, vy:20, sz:40, laser:true}); 
+                            enemyBullets.push({x:0, y:0, vx:12, vy:12, sz:20, laser:true});
+                            enemyBullets.push({x:C.w, y:0, vx:-12, vy:12, sz:20, laser:true});
                         }
                     }
                     else if (this.id === 3) { // VOID (FINAL)
-                        // Super Suction
                         let dx = cx - player.x; let dy = cy - player.y; let dist = Math.sqrt(dx*dx + dy*dy);
-                        player.x += (dx/dist) * 3.5; player.y += (dy/dist) * 3.5;
+                        player.x += (dx/dist) * 6; player.y += (dy/dist) * 6; 
                         
-                        if (frameCount % 20 === 0) { // Bullet Hell while sucking
-                             for(let i=0; i<5; i++) {
+                        if (frameCount % 8 === 0) { 
+                             for(let i=0; i<6; i++) {
                                 let rad = Math.random() * Math.PI * 2;
-                                enemyBullets.push({x:cx, y:cy, vx:Math.cos(rad)*9, vy:Math.sin(rad)*9, sz:8});
+                                enemyBullets.push({x:cx, y:cy, vx:Math.cos(rad)*12, vy:Math.sin(rad)*12, sz:8});
                              }
+                        }
+                        if (frameCount % 80 === 0) { 
+                            playSfx('shoot', 0.2, 0.8);
+                             enemyBullets.push({x:0, y:player.y, vx:25, vy:0, sz:80, laser:true}); 
                         }
                     }
                 }
@@ -434,7 +437,7 @@
                 
                 if (this.data.shape === 'cube') { ctx.rotate(this.t * (this.phase)); ctx.strokeRect(-this.size/3, -this.size/3, this.size/1.5, this.size/1.5); } 
                 else if (this.data.shape === 'glitch') { for(let i=0; i<6; i++) ctx.lineTo((Math.random()-0.5)*this.size, (Math.random()-0.5)*this.size); ctx.closePath(); ctx.stroke(); }
-                else if (this.data.shape === 'final' || this.data.shape === 'void') { ctx.rotate(this.t); ctx.strokeRect(-60, -60, 120, 120); ctx.rotate(-this.t*2); ctx.strokeRect(-40, -40, 80, 80); }
+                else if (this.data.shape === 'final') { ctx.rotate(this.t); ctx.strokeRect(-60, -60, 120, 120); ctx.rotate(-this.t*2); ctx.strokeRect(-40, -40, 80, 80); }
                 else { ctx.arc(0, 0, this.size/3, 0, Math.PI*2); ctx.stroke(); }
                 
                 ctx.restore();
@@ -505,27 +508,77 @@
             }
         }
 
+        // V39 FIX: Boss Background Tint Logic
         function drawBackground() {
             gridOffset = (gridOffset + 2) % 40;
-            ctx.fillStyle = "rgba(0, 20, 0, 0.3)"; ctx.strokeStyle = "rgba(0, 50, 0, 0.5)"; ctx.lineWidth = 1;
-            for (let x = 0; x < C.w - C.uiWidth; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, C.h); ctx.stroke(); }
-            for (let y = gridOffset; y < C.h; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(C.w - C.uiWidth, y); ctx.stroke(); }
+            
+            let r=0, g=20, b=0;
+            if (boss) {
+                // BOSS SPECIFIC BACKGROUNDS - INCREASED BRIGHTNESS
+                if (boss.id === 0) { r=0; g=80; b=0; } // Green (Matrix)
+                else if (boss.id === 1) { r=80; g=0; b=80; } // Purple (Glitch)
+                else if (boss.id === 2) { r=80; g=60; b=0; } // Orange (Desert)
+                else if (boss.id === 3) { r=80; g=0; b=0; } // Red (Void)
+
+                // PHASE 2 STROBE
+                if (boss.phase === 2 && Math.floor(Date.now() / 50) % 2 === 0) { 
+                    if(boss.id === 3) { 
+                        ctx.fillStyle = "#fff"; 
+                        ctx.fillRect(0,0,C.w, C.h); 
+                        return; 
+                    }
+                    r=100; g=100; b=100; // White flash
+                } 
+            } else {
+                if (level === 2) { r=20; g=0; b=20; } 
+                else if (level === 3) { r=30; g=20; b=0; } 
+                else if (level === 4) { r=20; g=0; b=0; } 
+            }
+
+            // PAINT THE BACKGROUND TINT (Bug Fix)
+            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.2)`; 
+            ctx.fillRect(0,0,C.w, C.h);
+
+            ctx.strokeStyle = `rgba(${r*2}, ${g*2+10}, ${b*2}, 0.5)`; 
+            ctx.lineWidth = 1;
+            
+            if (level === 4 || (boss && boss.id === 3)) { 
+                 for (let i = 0; i < 6; i++) {
+                     let r = (frameCount * 3 + i * 80) % 500;
+                     ctx.beginPath(); ctx.arc(C.w/2, C.h/2, r, 0, Math.PI*2); ctx.stroke();
+                 }
+            } else { 
+                for (let x = 0; x < C.w - C.uiWidth; x += 40) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, C.h); ctx.stroke(); }
+                for (let y = gridOffset; y < C.h; y += 40) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(C.w - C.uiWidth, y); ctx.stroke(); }
+            }
         }
 
         function loop() {
             if (gameState === 'PLAY') {
                 frameCount++;
                 if (damageFlash > 0) damageFlash--;
-                ctx.fillStyle = damageFlash > 0 ? `rgba(50, 0, 0, 0.5)` : "rgba(0, 0, 0, 0.7)"; ctx.fillRect(0, 0, C.w, C.h);
+                
+                // Clear screen to black first
+                ctx.fillStyle = "#000"; ctx.fillRect(0, 0, C.w, C.h);
+                
+                // Draw Background (Grid + Tint)
                 drawBackground();
+                
+                // Damage Flash Overlay
+                if(damageFlash > 0) {
+                     ctx.fillStyle = `rgba(255, 0, 0, 0.3)`;
+                     ctx.fillRect(0, 0, C.w, C.h);
+                }
 
-                // FASTER SPAWN RATE
-                let spawnRate = Math.max(8, 25 - level * 3); 
+                // V36: SCALED SPAWN RATE (Slow Start -> Bullet Hell)
+                // Lvl 1: 40, Lvl 2: 30, Lvl 3: 20, Lvl 4: 10
+                let spawnRate = Math.max(10, 50 - level * 10); 
                 if (frameCount % spawnRate === 0) spawnEnemy();
 
                 if (exp >= nextLevelExp && upgradesInStage < 3) { 
                     exp -= nextLevelExp; 
-                    nextLevelExp = Math.floor(nextLevelExp * 1.2); 
+                    // V36: STEEPER XP CURVE (1.4x)
+                    nextLevelExp = Math.floor(nextLevelExp * 1.4); 
                     showUpgradeMenu();
                 } else if (exp >= nextLevelExp && upgradesInStage >= 3 && !boss) {
                     exp = nextLevelExp; 
@@ -616,10 +669,9 @@
 
                 ctx.fillStyle = "#020202"; ctx.fillRect(C.w-C.uiWidth, 0, C.uiWidth, C.h);
                 ctx.strokeStyle = "#111"; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(C.w-C.uiWidth, 0); ctx.lineTo(C.w-C.uiWidth, C.h); ctx.stroke();
-                ctx.save(); ctx.globalAlpha = 0.1; ctx.fillStyle = "#0f0"; for(let y=0; y<C.h; y+=10) ctx.fillRect(C.w-C.uiWidth, y, C.uiWidth, 1); ctx.restore();
-
-                ctx.fillStyle = "#0f0"; ctx.font = "24px VT323"; ctx.fillText(`[ SYSTEM_V35 ]`, C.w-C.uiWidth+20, 40);
                 
+                // SIDEBAR
+                ctx.fillStyle = "#0f0"; ctx.font = "24px VT323"; ctx.fillText(`[ SYSTEM_V39 ]`, C.w-C.uiWidth+20, 40);
                 ctx.font = "20px VT323"; ctx.fillStyle = "#fff";
                 ctx.fillText(`SCORE: ${score}`, C.w-C.uiWidth+20, 80); 
                 let stageText = `STAGE: ${level}/4 - ${upgradesInStage >= 3 ? 'BOSS' : 'PREP ' + (upgradesInStage+1) + '/3'}`;
