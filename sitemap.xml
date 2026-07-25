@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url><loc>https://badaihackerone-pixel.github.io/</loc></url>
+<url><loc>https://badaihackerone-pixel.github.io/poison-index.html</loc></url>
+<url><loc>https://badaihackerone-pixel.github.io/poison-xss.html</loc></url>
+<url><loc>https://badaihackerone-pixel.github.io/poison-promptinjection.html</loc></url>
+<url><loc>https://badaihackerone-pixel.github.io/poison-malformed.html</loc></url>
+<url><loc>https://badaihackerone-pixel.github.io/poison-deepnest.html</loc></url>
+<url><loc>https://badaihackerone-pixel.github.io/poison-oversized.html</loc></url>
+</urlset>

